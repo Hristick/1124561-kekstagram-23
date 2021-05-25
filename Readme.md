@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Владимир Христофоров](https://up.htmlacademy.ru/javascript/23/user/1124561).
-* Наставник: [Алёна Сиприкова] (https://github.com/LenaVladi).
+* Наставник: [Алёна Сиприкова](https://up.htmlacademy.ru/javascript/23/user/549115).
 
 ---
 
