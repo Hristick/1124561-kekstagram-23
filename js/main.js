@@ -1,9 +1,9 @@
 // Получает положительное рандомное целое число > или = 0
-let ERROR = 'Введите правильный диапазон чисел!!!';
+const ERROR = 'Введите правильный диапазон чисел!!!';
 
 function getRandomIntInclusive(min, max) {
   const result = ((min >= 0) && (min < max)) ? Math.floor(Math.random() * (max - min + 1)) + min : ERROR;
-    return result;
+  return result;
 }
 
 //  Проверяет длину коментария
