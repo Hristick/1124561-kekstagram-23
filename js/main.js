@@ -8,7 +8,7 @@ function getRandomIntInclusive(min, max) {
 }
 getRandomIntInclusive();
 
-// Проверяет длину коментария
+//  Проверяет длину коментария
 function checkCommentLength(str, maxCommentLength) {
   let result = (str.length <= maxCommentLength) ? true : false;
   return result
