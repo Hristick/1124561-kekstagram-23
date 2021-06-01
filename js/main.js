@@ -2,15 +2,11 @@
 const ERROR = 'Введите правильный диапазон чисел!!!';
 
 function getRandomIntInclusive(min, max) {
-  const result = ((min >= 0) && (min < max)) ? Math.floor(Math.random() * (max - min + 1)) + min : ERROR;
-  return result;
+  return ((min >= 0) && (min < max)) ? Math.floor(Math.random() * (max - min + 1)) + min : 0;
 }
 
 //  Проверяет длину коментария
-function checkCommentLength(str, maxCommentLength) {
-  const result = (str.length <= maxCommentLength);
-  return result;
-}
+const checkCommentLength = (str, maxCommentLength) => str.length <= maxCommentLength;
 
 getRandomIntInclusive();
 checkCommentLength();
