@@ -4,5 +4,5 @@ const getRandomInt = (min, max) => ((min >= 0) && (min < max)) ? Math.floor(Math
 //  Проверяет длину коментария
 const checkCommentLength = (str, maxCommentLength) => str.length <= maxCommentLength;
 
-getRandomIntInclusive();
+getRandomInt();
 checkCommentLength();
