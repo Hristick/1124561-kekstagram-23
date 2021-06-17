@@ -10,7 +10,6 @@ const PHOTO_SRC = 'photos/';
 const PHOTO_FORMAT = '.jpg';
 const MIN_LIKE = 15;
 const MAX_LIKE = 200;
-let moksPostsArray = [];
 
 
 // Получает положительное рандомное целое число > или = 0
@@ -20,23 +19,23 @@ const getRandomInt = (min = 0, max = 0) => ((min >= 0) && (min < max)) ? Math.fl
 const checkCommentLength = (str = '', maxCommentLength = 140) => str.length <= maxCommentLength;
 
 const getUnquiArray = () => {
-  const result = new Set;
-  while (result.size < 25) {
+  const result = new Set();
+  while (result.size < MAX_POST) {
     result.add(getRandomInt(1,300));
   }
   return Array.from(result);
 };
 
-const getArrayMocks = () => {
+const getArrayMocks = (MAX_POST) => {
   const result = [];
   const moksCommentsArray = [];
-  const UNIQUI_ELEMENTS = getUnquiArray();
+  const unquiElements = getUnquiArray();
 
   for (let index = 0; index < MAX_POST; index++) {
     moksCommentsArray.push({
-      id: UNIQUI_ELEMENTS[index],
-      avatar: AVATAR_SRC + getRandomInt(0, 6) + AVATAR_FORMAT,
-      message: MESSAGES[getRandomInt(0, MESSAGES.length - 1)],
+      id: unquiElements[index],
+      avatar: AVATAR_SRC + getRandomInt(1, 6) + AVATAR_FORMAT,
+      message: checkCommentLength(MESSAGES[getRandomInt(0, MESSAGES.length - 1)]),
       name: COMMENTS_NAMES[getRandomInt(0, COMMENTS_NAMES.length - 1)],
     });
     result.push({
@@ -48,4 +47,6 @@ const getArrayMocks = () => {
     });
   } return result;
 };
-moksPostsArray = getArrayMocks(MAX_POST);
+const moksPostsArray = getArrayMocks(MAX_POST);
+moksPostsArray.length;
+
