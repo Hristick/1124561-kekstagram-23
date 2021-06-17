@@ -26,7 +26,7 @@ const getUnquiArray = () => {
   return Array.from(result);
 };
 
-const getArrayMocks = (MAX_POST) => {
+const getArrayMocks = () => {
   const result = [];
   const moksCommentsArray = [];
   const unquiElements = getUnquiArray();
@@ -40,7 +40,7 @@ const getArrayMocks = (MAX_POST) => {
     });
     result.push({
       id: index + 1,
-      url: PHOTO_SRC + index + 1 + PHOTO_FORMAT,
+      url: `${PHOTO_SRC}${index + 1}${PHOTO_FORMAT}`,
       description: DESCRIPTIONS[getRandomInt(0, DESCRIPTIONS.length - 1)],
       likes: getRandomInt(MIN_LIKE, MAX_LIKE),
       comments: moksCommentsArray[getRandomInt(0, moksCommentsArray.length - 1)],
@@ -49,4 +49,3 @@ const getArrayMocks = (MAX_POST) => {
 };
 const moksPostsArray = getArrayMocks(MAX_POST);
 moksPostsArray.length;
-
