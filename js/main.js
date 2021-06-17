@@ -41,7 +41,7 @@ const getArrayMocks = () => {
     });
     result.push({
       id: index + 1,
-      url: PHOTO_SRC + index + 1 + PHOTO_FORMAT,
+      url: PHOTO_SRC + (index + 1) + PHOTO_FORMAT,
       description: DESCRIPTIONS[getRandomInt(0, DESCRIPTIONS.length - 1)],
       likes: getRandomInt(MIN_LIKE, MAX_LIKE),
       comments: moksCommentsArray[getRandomInt(0, moksCommentsArray.length - 1)],
