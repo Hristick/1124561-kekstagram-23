@@ -18,20 +18,19 @@ const getRandomInt = (min = 0, max = 0) => ((min >= 0) && (min < max)) ? Math.fl
 //  Проверяет длину коментария
 const checkCommentLength = (str = '', maxCommentLength = 140) => str.length <= maxCommentLength;
 
-const getUnquiArray = () => {
+const getUnquiArray = (count = 0) => {
   const result = new Set();
-  while (result.size < MAX_POST) {
+  while (result.size < count) {
     result.add(getRandomInt(1,300));
   }
   return Array.from(result);
 };
 
-const getArrayMocks = () => {
+const getArrayMocks = (count = 0) => {
   const result = [];
   const moksCommentsArray = [];
-  const unquiElements = getUnquiArray();
-
-  for (let index = 0; index < MAX_POST; index++) {
+  const unquiElements = getUnquiArray(MAX_POST);
+  for (let index = 0; index < count; index++) {
     moksCommentsArray.push({
       id: unquiElements[index],
       avatar: AVATAR_SRC + getRandomInt(1, 6) + AVATAR_FORMAT,
@@ -43,7 +42,7 @@ const getArrayMocks = () => {
       url: `${PHOTO_SRC}${index + 1}${PHOTO_FORMAT}`,
       description: DESCRIPTIONS[getRandomInt(0, DESCRIPTIONS.length - 1)],
       likes: getRandomInt(MIN_LIKE, MAX_LIKE),
-      comments: moksCommentsArray[getRandomInt(0, moksCommentsArray.length - 1)],
+      comments: moksCommentsArray[index],
     });
   } return result;
 };
