@@ -1,4 +1,3 @@
-import {MAX_POST} from './render-moks-data';
 import {MAX_POST, getArrayMocks} from './render-moks-data.js';
 
 const moksPostsArray = getArrayMocks(MAX_POST);

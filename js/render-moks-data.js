@@ -33,4 +33,5 @@ const getArrayMocks = (count = 0) => {
     });
   } return result;
 };
+
 export {getArrayMocks};
