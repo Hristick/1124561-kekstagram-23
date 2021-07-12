@@ -7,3 +7,4 @@ const renderedPhoto = renderPhotos(moksPostsArray);
 
 const appendPhotos = document.querySelector('.pictures');
 appendPhotos.appendChild(renderedPhoto);
+console.log(renderedPhoto);
