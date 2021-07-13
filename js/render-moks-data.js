@@ -29,7 +29,7 @@ const getArrayMocks = (count = 0) => {
       url: `${PHOTO_SRC}${index + 1}${PHOTO_FORMAT}`,
       description: DESCRIPTIONS[getRandomInt(0, DESCRIPTIONS.length - 1)],
       likes: getRandomInt(MIN_LIKE, MAX_LIKE),
-      comments: moksCommentsArray.slice([0], [getRandomInt(0,[MAX_POST])]),
+      comments: moksCommentsArray,
     });
   } return result;
 };
