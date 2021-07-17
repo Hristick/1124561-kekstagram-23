@@ -27,6 +27,7 @@ const createComment = ({avatar, name, message}) => {
   commentText.classList.add('social__text');
   comment.appendChild(commentImg);
   comment.appendChild(commentText);
+  return comment;
 };
 
 const hideCommentCount = () => {
@@ -34,35 +35,36 @@ const hideCommentCount = () => {
   commentLoader.classList.add('hidden');
 };
 
-const closeFullsize = () => {
+
+const onCloseFullsize = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', closeIfEscPress());
+  document.removeEventListener('keydown', onCloseIfEscPress);
 };
 
-const closeIfEscPress = (evt) => {
+const onCloseIfEscPress = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    closeFullsize();
+    onCloseFullsize();
   }
 };
 
 
-const renderFullsize = ({url, likes, comments, description}) => {
-  bigPicture.classList.remove('hidden');
+const renderFullsizePhoto = ({url, likes, comments, description}) => {
   bigPictureImg.src = url;
   likesCount.textContent = likes;
   commentsCount.textContent = comments;
-  socialCaption.textContent =description;
+  socialCaption.textContent = description;
   commentList.appendChild(createComment());
 };
 
-const openFullsize = () => {
-  renderFullsize();
+const onOpenFullsize = () => {
+  renderFullsizePhoto();
   hideCommentCount();
+  bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  closeFullsizeButton.addEventListener('click', closeFullsize());
-  document.addEventListener('keydown', closeIfEscPress());
+  closeFullsizeButton.addEventListener('click', onCloseFullsize());
+  document.addEventListener('keydown', onCloseIfEscPress);
 };
 
-export {openFullsize};
+export {onOpenFullsize};
