@@ -10,7 +10,7 @@ const socialCaption = document.querySelector('.social__caption');
 const socialCommentCount = document.querySelector('.social__comment-count');
 const commentLoader = document.querySelector('.comments-loader');
 const closeFullsizeButton = document.querySelector('.big-picture__cancel');
-
+const pictures = document.querySelector('.pictures');
 
 const createComment = ({avatar, name, message}) => {
   const comment = document.createElement('li');
@@ -30,6 +30,14 @@ const createComment = ({avatar, name, message}) => {
   return comment;
 };
 
+
+const createFragmentComments = (comments) => {
+  const result = document.createDocumentFragment();
+  for (let index = 0; index < comments.length; index++) {
+    result.appendChild(comments[index]);
+  } return result;
+};
+
 const hideCommentCount = () => {
   socialCommentCount.classList.add('hidden');
   commentLoader.classList.add('hidden');
@@ -40,6 +48,7 @@ const onCloseFullsize = () => {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onCloseIfEscPress);
+  closeFullsizeButton.removeEventListener('click', onCloseFullsize);
 };
 
 const onCloseIfEscPress = (evt) => {
@@ -58,13 +67,15 @@ const renderFullsizePhoto = ({url, likes, comments, description}) => {
   commentList.appendChild(createComment());
 };
 
-const onOpenFullsize = () => {
-  renderFullsizePhoto();
+const onOpenFullsize = (Element) => {
+  renderFullsizePhoto(Element);
   hideCommentCount();
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  closeFullsizeButton.addEventListener('click', onCloseFullsize());
+  closeFullsizeButton.addEventListener('click', onCloseFullsize);
   document.addEventListener('keydown', onCloseIfEscPress);
 };
 
-export {onOpenFullsize};
+
+export {onOpenFullsize, renderFullsizePhoto, createComment, createFragmentComments};
+
