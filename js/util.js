@@ -12,4 +12,7 @@ const getUnquiArray = (count = 0) => {
   return Array.from(result);
 };
 
-export {getRandomInt, checkCommentLength, getUnquiArray};
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+
+export {getRandomInt, checkCommentLength, getUnquiArray, isEscEvent};

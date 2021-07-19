@@ -1,4 +1,4 @@
-import {getRandomInt, checkCommentLength, getUnquiArray} from './util.js';
+import {getRandomInt, getUnquiArray} from './util.js';
 
 const COMMENTS_NAMES = ['James', 'Julia', 'Alex', 'Michel', 'Grag', 'John'];
 const MESSAGES = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -13,25 +13,31 @@ const PHOTO_FORMAT = '.jpg';
 const MIN_LIKE = 15;
 const MAX_LIKE = 200;
 
-const getArrayMocks = (count = 0) => {
-  const result = [];
+const getCommentsMocks = (count = 0) => {
+
   const moksCommentsArray = [];
   const unquiElements = getUnquiArray(MAX_POST);
   for (let index = 0; index < count; index++) {
     moksCommentsArray.push({
       id: unquiElements[index],
       avatar: AVATAR_SRC + getRandomInt(1, 6) + AVATAR_FORMAT,
-      message: checkCommentLength(MESSAGES[getRandomInt(0, MESSAGES.length - 1)]),
+      message: MESSAGES[getRandomInt(0, MESSAGES.length - 1)],
       name: COMMENTS_NAMES[getRandomInt(0, COMMENTS_NAMES.length - 1)],
     });
+  } return moksCommentsArray;
+};
+
+const getArrayMocks = (count = 0) => {
+  const result = [];
+  for (let index = 0; index < count; index++) {
     result.push({
       id: index + 1,
       url: `${PHOTO_SRC}${index + 1}${PHOTO_FORMAT}`,
       description: DESCRIPTIONS[getRandomInt(0, DESCRIPTIONS.length - 1)],
       likes: getRandomInt(MIN_LIKE, MAX_LIKE),
-      comments: moksCommentsArray,
+      comments: getCommentsMocks(getRandomInt(0, MAX_POST)),
     });
   } return result;
 };
 
-export {getArrayMocks};
+export {getArrayMocks, getCommentsMocks};
