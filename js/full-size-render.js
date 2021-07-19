@@ -1,6 +1,4 @@
 import { isEscEvent } from './util.js';
-import { renderPhotos } from './render-photos.js';
-import { getCommentsMocks } from './render-moks-data.js';
 
 
 const AVATAR_SIZE = 35;
@@ -16,7 +14,6 @@ const closeFullsizeButton = document.querySelector('.big-picture__cancel');
 const pictures = document.querySelector('.pictures');
 const commentsListFragment = document.createDocumentFragment();
 
-const comm = createComment(getCommentsMocks(12));
 
 const createComment = ({avatar, name, message}) => {
   const comment = document.createElement('li');
@@ -36,13 +33,16 @@ const createComment = ({avatar, name, message}) => {
   return comment;
 };
 
-/*
-const createFragmentComments = (comments) => {
+
+/*const createFragmentComments = (comments) => {
   const result = document.createDocumentFragment();
   for (let index = 0; index < comments.length; index++) {
     const copyComment = comment.cloneNode(true);
     result.appendChild(copyComment[index]);
-  } return result;
+  }
+
+  return result;
+
 };*/
 
 const hideCommentCount = () => {
@@ -74,8 +74,7 @@ const renderFullsizePhoto = ({url, likes, comments, description}) => {
   commentList.appendChild(comm);
 };
 
-const onOpenFullsize = (element) => {
-  renderFullsizePhoto(element);
+const onOpenFullsize = () => {
   hideCommentCount();
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -84,5 +83,5 @@ const onOpenFullsize = (element) => {
 };
 
 
-export {onOpenFullsize, renderFullsizePhoto, createComment/*, createFragmentComments*/};
+export {onOpenFullsize, renderFullsizePhoto, createComment};
 
