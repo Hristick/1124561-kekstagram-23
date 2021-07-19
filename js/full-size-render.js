@@ -1,4 +1,7 @@
 import { isEscEvent } from './util.js';
+import { renderPhotos } from './render-photos.js';
+import { getCommentsMocks } from './render-moks-data.js';
+
 
 const AVATAR_SIZE = 35;
 const bigPicture = document.querySelector('.big-picture');
@@ -11,6 +14,9 @@ const socialCommentCount = document.querySelector('.social__comment-count');
 const commentLoader = document.querySelector('.comments-loader');
 const closeFullsizeButton = document.querySelector('.big-picture__cancel');
 const pictures = document.querySelector('.pictures');
+const commentsListFragment = document.createDocumentFragment();
+
+const comm = createComment(getCommentsMocks(12));
 
 const createComment = ({avatar, name, message}) => {
   const comment = document.createElement('li');
@@ -30,13 +36,14 @@ const createComment = ({avatar, name, message}) => {
   return comment;
 };
 
-
+/*
 const createFragmentComments = (comments) => {
   const result = document.createDocumentFragment();
   for (let index = 0; index < comments.length; index++) {
-    result.appendChild(comments[index]);
+    const copyComment = comment.cloneNode(true);
+    result.appendChild(copyComment[index]);
   } return result;
-};
+};*/
 
 const hideCommentCount = () => {
   socialCommentCount.classList.add('hidden');
@@ -64,11 +71,11 @@ const renderFullsizePhoto = ({url, likes, comments, description}) => {
   likesCount.textContent = likes;
   commentsCount.textContent = comments;
   socialCaption.textContent = description;
-  commentList.appendChild(createComment());
+  commentList.appendChild(comm);
 };
 
-const onOpenFullsize = (Element) => {
-  renderFullsizePhoto(Element);
+const onOpenFullsize = (element) => {
+  renderFullsizePhoto(element);
   hideCommentCount();
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
@@ -77,5 +84,5 @@ const onOpenFullsize = (Element) => {
 };
 
 
-export {onOpenFullsize, renderFullsizePhoto, createComment, createFragmentComments};
+export {onOpenFullsize, renderFullsizePhoto, createComment/*, createFragmentComments*/};
 
