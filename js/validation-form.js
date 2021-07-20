@@ -1,7 +1,8 @@
 import { isEscEvent } from './util.js';
 
-const HASHTAG_REGEX = /[^#[A-Za-zА-я0-9]{1,19}[ ]{0,1}]{0,5}$/;
+const HASHTAG_REGEX = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_COUNT = 5;
+const MAX_HASHTAG_LENGTH = 20;
 
 const upload = document.querySelector('.img-upload__overlay');
 const uploadCancel = document.querySelector('#upload-cancel');
@@ -19,13 +20,6 @@ const onOpenPopup = () => {
   document.body.classList.add('.modal-open');
 };
 
-const onCloseIfEscPress = (evt) => {
-  if (isEscEvent(evt) && !isUploadFormActiveField) {
-    evt.preventDefault();
-    onClosePopup();
-  }
-};
-
 
 const onClosePopup = () => {
 
@@ -35,8 +29,16 @@ const onClosePopup = () => {
   document.addEventListener('keypress', onCloseIfEscPress);
 };
 
+const onCloseIfEscPress = (evt) => {
+  if (isEscEvent(evt) && !isUploadFormActiveField) {
+    evt.preventDefault();
+    onClosePopup();
+    upload.removeEventListener('keypress', onClosePopup);
+  }
+};
 
-const onRenderPopup = () => {
+
+const renderPopup = () => {
   upLoadFile.addEventListener('change', onOpenPopup());
   uploadCancel.addEventListener('click', onClosePopup);
 };
@@ -52,22 +54,42 @@ const setInputValid = () => {
 };
 
 const validateHashtag = (hashtagString) => {
-  const hashtags = hashtagString.trim().split(' ').map((item) => item.toLowerCase());
+  const  hashtags = hashtagString.replace(/ +/g, ' ').trim().split(' ');
 
   if (hashtags.length > MAX_HASHTAG_COUNT) {
     setInputInvalid(`Нельзя указать больше чем ${MAX_HASHTAG_COUNT} хештегов`);
     return;
   }
 
+  const copyHashtags = [...new Set(hashtags.toLowerCase())];
+
   for (let index = 0; index < hashtags.length; index++) {
+
     const hashtag = hashtags[index];
     const hashtagValid = HASHTAG_REGEX.test(hashtag);
 
+    if (hashtag.length > MAX_HASHTAG_LENGTH) {
+      setInputInvalid(`Максимальная длина одного хештега ${MAX_HASHTAG_LENGTH} символов`);
+    }
+
     if (!hashtagValid) {
-      setInputInvalid('Максимальная длина одного хештега 20 символов, включая решётку, должна состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д');
+      setInputInvalid('Не верный формат хештега');
       return;
     }
-    if (hashtags.includes(hashtag, index + 1)) {
+
+    if (!HASHTAG_REGEX.test(hashtag.slice(1))) {
+      setInputInvalid('Не верный формат хештега');
+    }
+
+    if (hashtag.charAt(0) !== '#') {
+      setInputInvalid('Хештег должен начинаться с #');
+    }
+
+    if ((hashtag.length === 1) && (hashtag === '#')) {
+      setInputInvalid('Хештег не может состоять только из #');
+    }
+
+    if (hashtags !== copyHashtags) {
       setInputInvalid('Один и тот же хэштег не может быть использован дважды. Хештеги нечувствительны к регистру');
       return;
     }
@@ -88,29 +110,4 @@ uploadForm.addEventListener('submit', onHashtegValidate);
 upLoadFile.addEventListener('keydown', onClosePopup);
 
 
-/*
-textHashtags.addEventListener('input', () => {
-  const valueLength = textHashtags.value.length;
-
-  if (valueLength < MIN_HASHTAG_LENGTH) {
-    textHashtags.setCustomValidity(`Ещё ${  MIN_HASHTAG_LENGTH - valueLength } симв.`);
-  } else if (valueLength > MAX_HASHTAG_LENGTH) {
-    textHashtags.setCustomValidity(`Удалите лишние ${  valueLength - MAX_HASHTAG_LENGTH } симв.`);
-  } else {
-    textHashtags.setCustomValidity('');
-  }
-
-  textHashtags.reportValidity();
-});*/
-
-export { onRenderPopup };
-/*
-Хэш-теги:
-
-если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
-
-
-2.4. Комментарий:
-
-если фокус находится в поле ввода комментария, нажатие на Esc не должно приводить к закрытию формы редактирования изображения.
-*/
+export { renderPopup };
