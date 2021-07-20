@@ -1,3 +1,5 @@
+import { isEscEvent } from './util.js';
+
 const HASHTAG_REGEX = /[^#[A-Za-zА-я0-9]{1,19}[ ]{0,1}]{0,5}$/;
 const MAX_HASHTAG_COUNT = 5;
 
@@ -6,24 +8,37 @@ const uploadCancel = document.querySelector('#upload-cancel');
 const upLoadFile = document.querySelector('#upload-file');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
+const uploadForm = document.querySelector('.img-upload__form');
 
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
 
 
-const openPopup = () => {
+const onOpenPopup = () => {
   upload.classList.remove('hidden');
   document.body.classList.add('.modal-open');
 };
 
-const closePopup = () => {
-  upload.classList.add('hidden');
-  document.body.classList.remove('.modal-open');
+const onCloseIfEscPress = (evt) => {
+  if (isEscEvent(evt) && !isUploadFormActiveField) {
+    evt.preventDefault();
+    onClosePopup();
+  }
 };
 
+
+const onClosePopup = () => {
+
+  upload.classList.add('hidden');
+  document.body.classList.remove('.modal-open');
+  uploadCancel.removeEventListener(onClosePopup);
+  document.addEventListener('keypress', onCloseIfEscPress);
+};
+
+
 const onRenderPopup = () => {
-  upLoadFile.addEventListener('change', openPopup());
-  uploadCancel.addEventListener('click', closePopup);
+  upLoadFile.addEventListener('change', onOpenPopup());
+  uploadCancel.addEventListener('click', onClosePopup);
 };
 
 const setInputInvalid = (errorMsg) => {
@@ -58,6 +73,20 @@ const validateHashtag = (hashtagString) => {
     }
   }
 };
+
+const onHashtegValidate = () => {
+  const hashtagString = textHashtags.value;
+
+  setInputValid();
+  if (hashtagString !== '') {
+    validateHashtag(hashtagString);
+  }
+  textHashtags.reportValidity();
+};
+
+uploadForm.addEventListener('submit', onHashtegValidate);
+upLoadFile.addEventListener('keydown', onClosePopup);
+
 
 /*
 textHashtags.addEventListener('input', () => {
