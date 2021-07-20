@@ -3,6 +3,7 @@ import { renderPhotos } from './render-photos.js';
 import { onRenderPopup } from './validation-form.js';
 import { onOpenFullsize } from './full-size-render.js';
 
+
 const upLoadFile = document.querySelector('#upload-file');
 const appendPhotos = document.querySelector('.pictures');
 const MAX_POST = 25;
