@@ -26,6 +26,7 @@ const onClosePopup = () => {
   upload.classList.add('hidden');
   document.body.classList.remove('.modal-open');
   uploadCancel.removeEventListener(onClosePopup);
+  upload.removeEventListener('keypress', onClosePopup);
   document.addEventListener('keypress', onCloseIfEscPress);
 };
 
@@ -33,7 +34,6 @@ const onCloseIfEscPress = (evt) => {
   if (isEscEvent(evt) && !isUploadFormActiveField) {
     evt.preventDefault();
     onClosePopup();
-    upload.removeEventListener('keypress', onClosePopup);
   }
 };
 
@@ -61,7 +61,7 @@ const validateHashtag = (hashtagString) => {
     return;
   }
 
-  const copyHashtags = [...new Set(hashtags.toLowerCase())];
+  const uniqHashtags = [...new Set(hashtags.toLowerCase())];
 
   for (let index = 0; index < hashtags.length; index++) {
 
@@ -89,7 +89,7 @@ const validateHashtag = (hashtagString) => {
       setInputInvalid('Хештег не может состоять только из #');
     }
 
-    if (hashtags !== copyHashtags) {
+    if (hashtags.length !== uniqHashtags.length) {
       setInputInvalid('Один и тот же хэштег не может быть использован дважды. Хештеги нечувствительны к регистру');
       return;
     }
