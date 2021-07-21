@@ -27,7 +27,6 @@ const onClosePopup = () => {
   document.body.classList.remove('.modal-open');
   uploadCancel.removeEventListener(onClosePopup);
   upload.removeEventListener('keypress', onClosePopup);
-  document.addEventListener('keypress', onCloseIfEscPress);
 };
 
 const onCloseIfEscPress = (evt) => {
@@ -108,6 +107,7 @@ const onHashtegValidate = () => {
 
 uploadForm.addEventListener('submit', onHashtegValidate);
 upLoadFile.addEventListener('keydown', onClosePopup);
+document.addEventListener('keydown', onCloseIfEscPress);
 
 
 export { renderPopup };
