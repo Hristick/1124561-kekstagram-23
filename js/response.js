@@ -1,13 +1,9 @@
+const getData = (onSuccess, onError) => {
 
-const DATA_URL = 'https://23.javascript.pages.academy/kekstagram/data';
-
-
-const getData = (DATA_URL, ) => {
-
-  fetch(DATA_URL, options)
+  fetch()
     .then((response) => {
       if (response.ok) {
-        return response.json();
+        onSuccess(response);
       }
       onError();
     })
@@ -16,9 +12,7 @@ const getData = (DATA_URL, ) => {
         onSuccess(result);
       }
     })
-    .catch(() => {
-      onError();
-    });
+    .catch(onError);
 };
 
 

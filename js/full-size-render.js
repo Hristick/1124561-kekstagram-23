@@ -9,7 +9,6 @@ const likesCount = bigPicture.querySelector('.likes-count');
 const commentsCount = bigPicture.querySelector('.comments-count');
 const commentList = bigPicture.querySelector('.social__comments');
 const socialCaption = bigPicture.querySelector('.social__caption');
-const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const commentLoader = bigPicture.querySelector('.comments-loader');
 const closeFullsizeButton = bigPicture.querySelector('.big-picture__cancel');
 const fullsizeFooter = bigPicture.querySelector('.social__footer');
@@ -67,28 +66,15 @@ const hideCommentsDomElements = () => {
 };
 
 
-/*const hideCommentCount = () => {
-  socialCommentCount.classList.add('hidden');
-  commentLoader.classList.add('hidden');
-};*/
-
-const clearComments = () => {
-  commentsData = [];
-  commentsStart = 0;
-  showCommentsDomElements();
-};
-
 const renderComments = () => {
-  if (commentsData.length === 0) {
-    hideCommentsDomElements();
-    return;
-  }
 
   const commentsToLoad = commentsData.slice(commentsStart, commentsStart + COMMENTS_STEP);
 
+  const fragment = document.createDocumentFragment();
   commentsToLoad.forEach((comment) => {
-    commentList.appendChild(createComment(comment));
+    fragment.appendChild(createComment(comment));
   });
+  commentList.appendChild(fragment);
 
   commentsShown.textContent = commentList.children.length;
 
@@ -122,12 +108,27 @@ const renderFullsizePhoto = ({url, likes, comments, description}) => {
   commentsCount.textContent = comments;
   socialCaption.textContent = description;
 
-  clearComments();
-  commentsData = comments;
-  renderComments();
+  if (comments.length !== 0) {
+    commentsData = [...comments];
+    renderComments(commentsData);
 
-  commentLoader.addEventListener('click', onFullsizeCommentsLoader);
+  } else {
+    hideCommentsDomElements();
+  }
+};
 
+commentLoader.addEventListener('click', onFullsizeCommentsLoader);
+
+const renderPictures = (pictures) => {
+  const pictureListFragment = document.createDocumentFragment();
+
+
+  removePictures();
+
+  pictures.forEach((item) => pictureListFragment.appendChild(renderPictures(item)));
+
+  pictureList.appendChild(pictureListFragment);
+  pictureList.addEventListener('click', onPictureList);
 };
 
 const onOpenFullsize = () => {
@@ -146,26 +147,13 @@ const onPictureList = (evt) => {
     const pictureId = +picture.dataset.id;
     const dataElement = pictures.find(({id}) => id === pictureId);
 
-    if (!dataElement) {
-      throw new Error('Element not found');
-    }
-    onOpenFullsize(dataElement);
+    if (dataElement) {
+      onOpenFullsize(dataElement);
   }
 };
 
 const removePictures = () => pictureList.querySelectorAll('.picture').forEach((item) => item.remove());
 
-const renderPictures = (data) => {
-  const pictureListFragment = document.createDocumentFragment();
-  pictures = data;
-
-  removePictures();
-
-  pictures.forEach((item) => pictureListFragment.appendChild(renderPictures(item)));
-
-  pictureList.appendChild(pictureListFragment);
-  pictureList.addEventListener('click', onPictureList);
-};
 
 export {onOpenFullsize, renderFullsizePhoto, createComment};
 
