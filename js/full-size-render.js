@@ -67,10 +67,10 @@ const hideCommentsDomElements = () => {
 };
 
 
-const hideCommentCount = () => {
+/*const hideCommentCount = () => {
   socialCommentCount.classList.add('hidden');
   commentLoader.classList.add('hidden');
-};
+};*/
 
 const clearComments = () => {
   commentsData = [];
@@ -161,7 +161,7 @@ const renderPictures = (data) => {
 
   removePictures();
 
-  pictures.forEach((item) => pictureListFragment.appendChild(renderPicture(item)));
+  pictures.forEach((item) => pictureListFragment.appendChild(renderPictures(item)));
 
   pictureList.appendChild(pictureListFragment);
   pictureList.addEventListener('click', onPictureList);
