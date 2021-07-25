@@ -109,7 +109,7 @@ const onOpenPopup = () => {
   resetScale();
 };
 
-const sendSuccess = () => {
+const onSendSuccess = () => {
   document.body.append(success);
   onClosePopup();
   document.body.addEventListener('keydown', (evt) => {
@@ -121,9 +121,8 @@ const sendSuccess = () => {
   });
 };
 
-const sendError = () => {
+const onSendError = () => {
   document.body.append(error);
-  onClosePopup();
   document.body.addEventListener('keydown', (evt) => {
     if (isEscEvent(evt)) {
       document.body.remove(error);}
@@ -134,7 +133,7 @@ const sendError = () => {
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const formData =  new FormData(evt.target);
-  sendData(sendSuccess, sendError, formData);
+  sendData(onSendSuccess, onSendError, formData);
 });
 
 
