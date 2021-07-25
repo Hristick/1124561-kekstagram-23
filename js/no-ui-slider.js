@@ -84,7 +84,9 @@ const effectsLevelInput = uploadForm.querySelector('.effect-level__value');
 let currentEffect = DEFAULT_EFFECT;
 
 const createNoUiSlider = () => {
-  noUiSlider.create(slider, sliderOptionsDefault);
+  if (!slider.noUiSlider) {
+    noUiSlider.create(slider, sliderOptionsDefault);
+  }
 };
 
 const changeEffectClassName = (name) => {

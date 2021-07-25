@@ -19,5 +19,17 @@ const getData = (onSuccess, onError) => {
     .catch(onError);
 };
 
+const sendData = (onSuccess, onFail, formData) => {
+  fetch('https://23.javascript.pages.academy/kekstagram', { method: 'POST', body: formData })
+    .then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        onFail();
+      }
+    })
+    .catch((error) => onFail(error));
+};
 
-export { getData, getShareData};
+
+export { getData, sendData, getShareData};

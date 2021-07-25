@@ -1,6 +1,7 @@
 import { isEscEvent } from './util.js';
 import { resetScale } from './scale-photo.js';
 import { createNoUiSlider} from './no-ui-slider.js';
+import { sendData } from './api.js';
 
 const HASHTAG_REGEX = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_COUNT = 5;
@@ -11,7 +12,8 @@ const uploadCancel = document.querySelector('.img-upload__cancel');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
-
+const sendSuccess = () => {};
+const sendError = () => {};
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
 
@@ -104,5 +106,12 @@ const onOpenPopup = () => {
   createNoUiSlider();
   resetScale();
 };
+
+uploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const formData =  new FormData(evt.target);
+  sendData(sendSuccess, sendError, formData);
+});
+
 
 export { onOpenPopup };
