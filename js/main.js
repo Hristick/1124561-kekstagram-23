@@ -1,21 +1,29 @@
-import { getArrayMocks } from './render-moks-data.js';
+import { showAlert } from './util.js';
+import { getData } from './api.js';
 import { renderPhotos } from './render-photos.js';
-import { renderPopup } from './validation-form.js';
-import { getData } from './response.js';
+import { onPictureList} from './full-size-render.js';
+import { onOpenPopup} from './form.js';
+import { activateFilters } from './filters.js';
 
 
-const upLoadFile = document.querySelector('#upload-file');
+const ALERT_MESSAGE_TEXT = 'Ошибка загрузки данных!!!';
+const ALERT_TIMEOUT = 7000;
 const appendPhotos = document.querySelector('.pictures');
-const MAX_POST = 25;
+const pictureList = document.querySelector('.pictures');
+const uploadForm = document.querySelector('.img-upload__form');
+
+const onSuccess = (response) => {
+  const data = [...response];
+  appendPhotos.appendChild(renderPhotos(data));
+  pictureList.addEventListener('click', onPictureList);
+  activateFilters();
+};
+
+const onError = () => {
+  showAlert(ALERT_MESSAGE_TEXT, ALERT_TIMEOUT);
+};
 
 
-const moksPostsArray = getArrayMocks(MAX_POST);
-const renderedPhoto = renderPhotos(moksPostsArray);
-appendPhotos.appendChild(renderedPhoto);
+getData(onSuccess, onError);
 
-
-upLoadFile.addEventListener('click', renderPopup);
-
-getData();
-
-
+uploadForm.addEventListener('click', onOpenPopup);

@@ -1,31 +1,30 @@
 import { isEscEvent } from './util.js';
+import { resetScale } from './scale-photo.js';
+import { createNoUiSlider} from './no-ui-slider.js';
+import { sendData } from './api.js';
 
 const HASHTAG_REGEX = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 
 const upload = document.querySelector('.img-upload__overlay');
-const uploadCancel = document.querySelector('#upload-cancel');
-const upLoadFile = document.querySelector('#upload-file');
+const uploadCancel = document.querySelector('.img-upload__cancel');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
+const success = document.querySelector('#success').content.querySelector('.success');
+const successCloseButton = document.querySelector('.success__button');
+const error = document.querySelector('#error').content.querySelector('.error');
 
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
-
-
-const onOpenPopup = () => {
-  upload.classList.remove('hidden');
-  document.body.classList.add('.modal-open');
-};
 
 
 const onClosePopup = () => {
 
   upload.classList.add('hidden');
   document.body.classList.remove('.modal-open');
-  uploadCancel.removeEventListener(onClosePopup);
+  uploadCancel.removeEventListener('click', onClosePopup);
   upload.removeEventListener('keypress', onClosePopup);
 };
 
@@ -36,11 +35,6 @@ const onCloseIfEscPress = (evt) => {
   }
 };
 
-
-const renderPopup = () => {
-  upLoadFile.addEventListener('change', onOpenPopup());
-  uploadCancel.addEventListener('click', onClosePopup);
-};
 
 const setInputInvalid = (errorMsg) => {
   textHashtags.style.outline = '2px solid red';
@@ -59,8 +53,7 @@ const validateHashtag = (hashtagString) => {
     setInputInvalid(`Нельзя указать больше чем ${MAX_HASHTAG_COUNT} хештегов`);
     return;
   }
-
-  const uniqHashtags = [...new Set(hashtags.toLowerCase())];
+  const uniqHashtags = [...new Set(hashtags)];
 
   for (let index = 0; index < hashtags.length; index++) {
 
@@ -76,7 +69,7 @@ const validateHashtag = (hashtagString) => {
       return;
     }
 
-    if (!HASHTAG_REGEX.test(hashtag.slice(1))) {
+    if (HASHTAG_REGEX.test(hashtag.slice(1))) {
       setInputInvalid('Не верный формат хештега');
     }
 
@@ -105,9 +98,43 @@ const onHashtegValidate = () => {
   textHashtags.reportValidity();
 };
 
-uploadForm.addEventListener('submit', onHashtegValidate);
-upLoadFile.addEventListener('keydown', onClosePopup);
-document.addEventListener('keydown', onCloseIfEscPress);
+
+const onOpenPopup = () => {
+  upload.classList.remove('hidden');
+  document.body.classList.add('.modal-open');
+  uploadForm.addEventListener('input', onHashtegValidate);
+  uploadCancel.addEventListener('click', onClosePopup);
+  document.addEventListener('keydown', onCloseIfEscPress);
+  createNoUiSlider();
+  resetScale();
+};
+
+const onSendSuccess = () => {
+  document.body.append(success);
+  onClosePopup();
+  document.body.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      document.body.remove(success);}
+  });
+  successCloseButton.addEventListener('click', () => {
+    document.body.remove(success);
+  });
+};
+
+const onSendError = () => {
+  document.body.append(error);
+  document.body.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      document.body.remove(error);}
+  });
+};
 
 
-export { renderPopup };
+uploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const formData =  new FormData(evt.target);
+  sendData(onSendSuccess, onSendError, formData);
+});
+
+
+export { onOpenPopup };

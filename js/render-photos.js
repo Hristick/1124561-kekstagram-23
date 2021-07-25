@@ -9,10 +9,10 @@ const renderPhotos = (array = []) => {
     renderedPicture.querySelector('.picture__img').src = array[index].url;
     renderedPicture.querySelector('.picture__likes').textContent = array[index].likes;
     renderedPicture.querySelector('.picture__comments').textContent = array[index].comments.length;
+    renderedPicture.dataset.id = array[index].id;
     result.appendChild(renderedPicture);
   }
   return result;
 };
-
 
 export{renderPhotos};
