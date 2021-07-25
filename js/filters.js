@@ -45,7 +45,7 @@ const setFilterActive = (evt) => {
   }
 };
 
-const handleFilterClick = debounce((evt) => {
+const onFilterClick = debounce((evt) => {
   if (evt.target.closest('.img-filters__button')) {
     const filterCurrent = evt.target.id;
     const filteredPictures = getFilteredArray(filterCurrent);
@@ -58,7 +58,7 @@ const handleFilterClick = debounce((evt) => {
 
 const filterListClickHandler = (evt) => {
   setFilterActive(evt);
-  handleFilterClick(evt);
+  onFilterClick(evt);
 };
 
 const activateFilters = () => {

@@ -12,8 +12,10 @@ const uploadCancel = document.querySelector('.img-upload__cancel');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
-const sendSuccess = () => {};
-const sendError = () => {};
+const success = document.querySelector('#success').content.querySelector('.success');
+const successCloseButton = document.querySelector('.success__button');
+const error = document.querySelector('#error').content.querySelector('.error');
+
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
 
@@ -106,6 +108,28 @@ const onOpenPopup = () => {
   createNoUiSlider();
   resetScale();
 };
+
+const sendSuccess = () => {
+  document.body.append(success);
+  onClosePopup();
+  document.body.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      document.body.remove(success);}
+  });
+  successCloseButton.addEventListener('click', () => {
+    document.body.remove(success);
+  });
+};
+
+const sendError = () => {
+  document.body.append(error);
+  onClosePopup();
+  document.body.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      document.body.remove(error);}
+  });
+};
+
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
