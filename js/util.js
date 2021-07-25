@@ -19,10 +19,10 @@ const showAlert = (message, timeoutDelay) => {
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
   alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
+  alertContainer.style.top = 50;
   alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
+  alertContainer.style.padding = '10px 30px';
+  alertContainer.style.fontSize = '50px';
   alertContainer.style.textAlign = 'center';
   alertContainer.style.backgroundColor = 'red';
 

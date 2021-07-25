@@ -25,7 +25,7 @@ const onClosePopup = () => {
 
   upload.classList.add('hidden');
   document.body.classList.remove('.modal-open');
-  uploadCancel.removeEventListener(onClosePopup);
+  uploadCancel.removeEventListener('click', onClosePopup);
   upload.removeEventListener('keypress', onClosePopup);
 };
 
@@ -36,12 +36,12 @@ const onCloseIfEscPress = (evt) => {
   }
 };
 
-
+/*
 const renderPopup = () => {
   upLoadFile.addEventListener('change', onOpenPopup());
   uploadCancel.addEventListener('click', onClosePopup);
 };
-
+*/
 const setInputInvalid = (errorMsg) => {
   textHashtags.style.outline = '2px solid red';
   textHashtags.setCustomValidity(errorMsg);
@@ -109,5 +109,5 @@ uploadForm.addEventListener('submit', onHashtegValidate);
 upLoadFile.addEventListener('keydown', onClosePopup);
 document.addEventListener('keydown', onCloseIfEscPress);
 
+upLoadFile.addEventListener('change', onOpenPopup());
 
-export { renderPopup };
