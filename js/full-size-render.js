@@ -13,7 +13,6 @@ const socialCaption = bigPicture.querySelector('.social__caption');
 const commentLoader = bigPicture.querySelector('.comments-loader');
 const closeFullsizeButton = bigPicture.querySelector('.big-picture__cancel');
 const fullsizeFooter = bigPicture.querySelector('.social__footer');
-const pictureList = document.querySelector('.pictures');
 const commentsStartCount = document.querySelector('.comments-start');
 
 let commentsStart = 0;
@@ -42,7 +41,7 @@ const showCommentsDomElements = () => {
   commentList.classList.remove('hidden');
   commentsCount.classList.remove('hidden');
   commentLoader.classList.remove('hidden');
-  fullsizeFooter.style.border = '1px solid #cccccc';
+  fullsizeFooter.style.border = '2px solid grey';
 };
 
 const hideCommentsDomElements = () => {
@@ -56,8 +55,8 @@ const hideCommentsDomElements = () => {
 const renderComments = (array) => {
   if (array.length < MAX_COMMENT_SHOW) {
     commentsStartCount.textContent = array.length;
+    commentLoader.classList.add('hidden');
   }
-
   const commentsToLoad = array.slice(commentsStart, commentsStart + COMMENTS_STEP);
 
   const fragment = document.createDocumentFragment();
@@ -66,9 +65,9 @@ const renderComments = (array) => {
     fragment.appendChild(singleComent);
   }
   commentList.appendChild(fragment);
+  commentsStartCount.textContent = commentList.children.length;
 
-
-  if (array.length === commentsToLoad.length) {
+  if (array.length === commentList.children.length) {
     commentLoader.classList.add('hidden');
   }
 
@@ -90,26 +89,25 @@ const onCloseIfEscPress = (evt) => {
   }
 };
 
-const onFullsizeCommentsLoader = () => renderComments();
 
 const renderFullsizePhoto = ({url = '', likes = 0, comments = [], description = ''}) => {
   bigPictureImg.src = url;
   likesCount.textContent = likes;
   commentsCount.textContent = comments.length;
   socialCaption.textContent = description;
+  const commentsData = [...comments];
 
   if (comments.length !== 0) {
+    commentLoader.classList.remove('hidden');
     showCommentsDomElements();
-    const commentsData = [...comments];
     renderComments(commentsData);
+    commentLoader.addEventListener('click', () => renderComments(commentsData));
+
   } else {
     hideCommentsDomElements();
   }
+
 };
-
-commentLoader.addEventListener('click', onFullsizeCommentsLoader);
-
-const removePictures = () => pictureList.querySelectorAll('.picture').forEach((item) => item.remove());
 
 
 const onOpenFullsize = (element) => {
@@ -123,7 +121,6 @@ const onOpenFullsize = (element) => {
 
 const onPictureList = (evt) => {
   const pictures = getShareData();
-
 
   const picture = evt.target.closest('.picture');
   if (picture) {

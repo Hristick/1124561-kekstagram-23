@@ -1,10 +1,11 @@
-/*const DEFAULT_EFFECT = 'none';
+const DEFAULT_EFFECT = 'none';
 
 const sliderOptionsDefault = {
+  start: 1,
   connect: 'lower',
-  format: {
-    to: (value) => (Number.isInteger(value)) ? value.toFixed(0) : value.toFixed(1),
-    from: (value) => parseFloat(value),
+  range: {
+    'min': 0,
+    'max': 100,
   },
 };
 
@@ -82,33 +83,18 @@ const effectsLevelInput = uploadForm.querySelector('.effect-level__value');
 
 let currentEffect = DEFAULT_EFFECT;
 
-const changeEffectClassName = (item) => {
+const createNoUiSlider = () => {
+  noUiSlider.create(slider, sliderOptionsDefault);
+};
+
+const changeEffectClassName = (name) => {
   uploadFormImg.classList.remove(`effects__preview--${currentEffect}`);
-  currentEffect = item.value;
+  currentEffect = name;
   uploadFormImg.classList.add(`effects__preview--${currentEffect}`);
 };
 
 const setEffectFilter = (filterName, value, unit) => {
   uploadFormImg.style.filter = `${filterName}(${value}${unit})`;
-};
-
-const updateSlider = (values, handle) => {
-  const effectFilter = sliderOptionsConfig[currentEffect].filter;
-  const effectUnit = sliderOptionsConfig[currentEffect].unit;
-
-  effectsLevelInput.value = values[handle];
-  setEffectFilter(effectFilter, effectsLevelInput.value, effectUnit);
-};
-
-const configureSlider = (options) => {
-  sliderWrap.classList.remove('hidden');
-  if (!slider.noUiSlider) {
-    noUiSlider.create(slider, {...sliderOptionsDefault, ...options});
-    slider.noUiSlider.on('update', updateSlider);
-  } else {
-    slider.noUiSlider.updateOptions(options);
-  }
-  effectsLevelInput.value = options.start;
 };
 
 const destroySlider = () => {
@@ -122,25 +108,40 @@ const resetEffects = () => {
   uploadFormImg.style.filter = '';
   uploadFormImg.className = '';
   effectsLevelInput.value = '';
-  destroySlider();
   sliderWrap.classList.add('hidden');
 };
 
-const effectsListClickHandler = (evt) => {
-  if (evt.target.matches('[type=radio]')) {
-    changeEffectClassName(evt.target);
+const updateSlider = (values, handle) => {
+
+  const effectFilter = sliderOptionsConfig[currentEffect].filter;
+  const effectUnit = sliderOptionsConfig[currentEffect].unit;
+
+  effectsLevelInput.value = values[handle];
+  setEffectFilter(effectFilter, effectsLevelInput.value, effectUnit);
+};
+
+const configureSlider = (options = {}) => {
+  sliderWrap.classList.remove('hidden');
+  slider.noUiSlider.updateOptions(options);
+  effectsLevelInput.value = options.start;
+};
+
+
+const onEffectsListClick = (evt) => {
+  if (evt.target.closest('[type=radio]')) {
+    const effectName = evt.target.value;
+    changeEffectClassName(effectName);
     if (currentEffect !== DEFAULT_EFFECT) {
       configureSlider(sliderOptionsConfig[currentEffect].settings);
+      slider.noUiSlider.on('update', updateSlider);
     } else {
       resetEffects();
     }
   }
 };
 
-resetEffects();
 
-effectsList.addEventListener('click', effectsListClickHandler);
+effectsList.addEventListener('click', onEffectsListClick);
 
-export {resetEffects};
+export {resetEffects, createNoUiSlider, destroySlider};
 
-*/

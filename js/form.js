@@ -1,24 +1,20 @@
 import { isEscEvent } from './util.js';
+import { resetScale } from './scale-photo.js';
+import { resetEffects, createNoUiSlider } from './no-ui-slider.js';
 
 const HASHTAG_REGEX = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
 
 const upload = document.querySelector('.img-upload__overlay');
-const uploadCancel = document.querySelector('#upload-cancel');
-const upLoadFile = document.querySelector('#upload-file');
+const uploadCancel = document.querySelector('.upload-cancel');
+const uploadFile = document.querySelector('#upload-file');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
 
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
-
-
-const onOpenPopup = () => {
-  upload.classList.remove('hidden');
-  document.body.classList.add('.modal-open');
-};
 
 
 const onClosePopup = () => {
@@ -105,9 +101,16 @@ const onHashtegValidate = () => {
   textHashtags.reportValidity();
 };
 
-uploadForm.addEventListener('submit', onHashtegValidate);
-upLoadFile.addEventListener('keydown', onClosePopup);
-document.addEventListener('keydown', onCloseIfEscPress);
 
-upLoadFile.addEventListener('change', onOpenPopup());
+const onOpenPopup = () => {
+  resetScale();
+  resetEffects();
+  upload.classList.remove('hidden');
+  document.body.classList.add('.modal-open');
+  createNoUiSlider();
+  uploadForm.addEventListener('submit', onHashtegValidate);
+  uploadFile.addEventListener('keydown', onClosePopup);
+  document.addEventListener('keydown', onCloseIfEscPress);
+};
 
+export { onOpenPopup };
