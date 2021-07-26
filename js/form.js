@@ -19,10 +19,12 @@ const success = document.querySelector('#success').content.querySelector('.succe
 const error = document.querySelector('#error').content.querySelector('.error');
 const uploadFile = uploadForm.querySelector('#upload-file');
 
+
 const popupTemplates = {
   success: success,
   error: error,
 };
+
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
 
