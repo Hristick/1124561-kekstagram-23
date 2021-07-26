@@ -6,15 +6,18 @@ import { sendData } from './api.js';
 const HASHTAG_REGEX = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_COUNT = 5;
 const MAX_HASHTAG_LENGTH = 20;
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const upload = document.querySelector('.img-upload__overlay');
 const uploadCancel = document.querySelector('.img-upload__cancel');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
-//const successCloseButton = document.querySelector('.success__button');
+const uploadFormImg = uploadForm.querySelector('.img-upload__preview img');
+const uploadFormEffectPreviews = uploadForm.querySelectorAll('.effects__preview');
 const success = document.querySelector('#success').content.querySelector('.success');
 const error = document.querySelector('#error').content.querySelector('.error');
+const uploadFile = uploadForm.querySelector('#upload-file');
 
 const popupTemplates = {
   success: success,
@@ -113,6 +116,32 @@ const onOpenPopup = () => {
   resetScale();
 };
 
+const resetUploadImage = () => {
+  uploadFormImg.src = '';
+  uploadFormEffectPreviews.forEach((item) => item.style.backgroundImage = 'none');
+};
+
+const uploadImage = () => {
+  const file = uploadFile.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      const result = reader.result;
+      uploadFormImg.src = result;
+      uploadFormEffectPreviews.forEach((item) => item.style.backgroundImage = `url(${result})`);
+    });
+    reader.readAsDataURL(file);
+  } else {
+    uploadFile.value = '';
+    resetUploadImage();
+  }
+};
+
+
 const removePopup = () => {
   const popup = document.querySelector('.success') || document.querySelector('.error');
   if (popup) {
@@ -151,28 +180,13 @@ const renderPopup = (type) => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-/*
-const onSendSuccess = () => {
-  document.body.append(success);
-  onClosePopup();
-  document.body.addEventListener('keydown', (evt) => {
-    if (isEscEvent(evt)) {
-      document.body.remove(success);}
-  });
-  successCloseButton.addEventListener('click', () => {
-    document.body.remove(success);
-  });
+
+const onUploadFileChange = () => {
+  onOpenPopup();
+  uploadImage();
 };
 
-const onSendError = () => {
-  document.body.append(error);
-  document.body.addEventListener('keydown', (evt) => {
-    if (isEscEvent(evt)) {
-      document.body.remove(error);}
-  });
-};
-
-*/
+uploadFile.addEventListener('change', onUploadFileChange);
 
 const onSendSuccess = () => {
   onClosePopup();
