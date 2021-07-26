@@ -12,24 +12,28 @@ const uploadCancel = document.querySelector('.img-upload__cancel');
 const textHashtags = document.querySelector('.text__hashtags');
 const textDescription = document.querySelector('.text__description');
 const uploadForm = document.querySelector('.img-upload__form');
+//const successCloseButton = document.querySelector('.success__button');
 const success = document.querySelector('#success').content.querySelector('.success');
-const successCloseButton = document.querySelector('.success__button');
 const error = document.querySelector('#error').content.querySelector('.error');
 
+const popupTemplates = {
+  success: success,
+  error: error,
+};
 
 const isUploadFormActiveField = () => document.activeElement === textHashtags || document.activeElement === textDescription;
 
 
 const onClosePopup = () => {
 
+  document.body.classList.remove('modal-open');
   upload.classList.add('hidden');
-  document.body.classList.remove('.modal-open');
   uploadCancel.removeEventListener('click', onClosePopup);
-  upload.removeEventListener('keypress', onClosePopup);
+  upload.removeEventListener('keydown', onClosePopup);
 };
 
 const onCloseIfEscPress = (evt) => {
-  if (isEscEvent(evt) && !isUploadFormActiveField) {
+  if (isEscEvent(evt) && !isUploadFormActiveField()) {
     evt.preventDefault();
     onClosePopup();
   }
@@ -47,7 +51,7 @@ const setInputValid = () => {
 };
 
 const validateHashtag = (hashtagString) => {
-  const  hashtags = hashtagString.replace(/ +/g, ' ').trim().split(' ');
+  const  hashtags = hashtagString.replace(/ +/g, ' ').trim().split(' ').map((item) => item.toLowerCase());
 
   if (hashtags.length > MAX_HASHTAG_COUNT) {
     setInputInvalid(`Нельзя указать больше чем ${MAX_HASHTAG_COUNT} хештегов`);
@@ -57,7 +61,7 @@ const validateHashtag = (hashtagString) => {
 
   for (let index = 0; index < hashtags.length; index++) {
 
-    const hashtag = hashtags[index];
+    const hashtag = hashtags[index].toLowerCase();
     const hashtagValid = HASHTAG_REGEX.test(hashtag);
 
     if (hashtag.length > MAX_HASHTAG_LENGTH) {
@@ -101,14 +105,53 @@ const onHashtegValidate = () => {
 
 const onOpenPopup = () => {
   upload.classList.remove('hidden');
-  document.body.classList.add('.modal-open');
+  document.body.classList.add('modal-open');
   uploadForm.addEventListener('input', onHashtegValidate);
-  uploadCancel.addEventListener('click', onClosePopup);
   document.addEventListener('keydown', onCloseIfEscPress);
+  uploadCancel.addEventListener('click', onClosePopup);
   createNoUiSlider();
   resetScale();
 };
 
+const removePopup = () => {
+  const popup = document.querySelector('.success') || document.querySelector('.error');
+  if (popup) {
+    popup.remove();
+    // eslint-disable-next-line no-use-before-define
+    document.removeEventListener('click', onDocumentClick);
+    // eslint-disable-next-line no-use-before-define
+    document.removeEventListener('keydown', onDocumentKeydown);
+  }
+};
+
+const onDocumentKeydown = (evt) => {
+  if (isEscEvent(evt)) {
+    evt.preventDefault();
+    removePopup();
+  }
+};
+
+const onDocumentClick = (evt) => {
+  if (!evt.target.closest('.success__inner') && !evt.target.closest('.error__inner')) {
+    removePopup();
+  }
+};
+
+const onPopupBtnClick = () => removePopup();
+
+
+const renderPopup = (type) => {
+  const popup = popupTemplates[type].cloneNode(true);
+  document.body.appendChild(popup);
+
+  const popupBtn = popup.querySelector('button');
+
+  popupBtn.addEventListener('click', onPopupBtnClick);
+  document.addEventListener('click', onDocumentClick);
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+/*
 const onSendSuccess = () => {
   document.body.append(success);
   onClosePopup();
@@ -129,6 +172,17 @@ const onSendError = () => {
   });
 };
 
+*/
+
+const onSendSuccess = () => {
+  onClosePopup();
+  renderPopup('success');
+};
+
+const onSendError = () => {
+  onClosePopup();
+  renderPopup('error');
+};
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();

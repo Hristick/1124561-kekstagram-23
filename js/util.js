@@ -1,17 +1,3 @@
-// Получает положительное рандомное целое число > или = 0
-const getRandomInt = (min = 0, max = 0) => ((min >= 0) && (min < max)) ? Math.floor(Math.random() * (max - min + 1)) + min : 0;
-
-//  Проверяет длину коментария
-const checkCommentLength = (str = '', maxCommentLength = 140) => str.length <= maxCommentLength;
-
-const getUnquiArray = (count = 0) => {
-  const result = new Set();
-  while (result.size < count) {
-    result.add(getRandomInt(1,300));
-  }
-  return Array.from(result);
-};
-
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const showAlert = (message, timeoutDelay) => {
@@ -53,35 +39,6 @@ function debounce (callback, timeoutDelay = 500) {
   };
 }
 
-// Функция взята из интернета и доработана
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
-
-function getRandomPositiveInteger (aa, bb) {
-  // Чтобы не заставлять пользователя нашей функции помнить порядок аргументов,
-  // реализуем поддержку передачи минимального и максимального значения в любом порядке,
-  // а какое из них большее и меньшее вычислим с помощью Math.min и Math.max.
-
-  // После нам нужно убедиться, что пользователь не передал дробные значения,
-  // для этого на всякий пожарный случай нижнюю границу диапазона
-  // мы округляем к ближайшему большему целому с помощью Math.ceil,
-  // а верхнюю границу - к ближайшему меньшему целому с помощью Math.floor
-  const lower = Math.ceil(Math.min(Math.abs(aa), Math.abs(bb)));
-  const upper = Math.floor(Math.max(Math.abs(aa), Math.abs(bb)));
-  // Обратите внимание, чтобы учесть условие, что диапазон может быть [0, ∞),
-  // мы не ругаем пользователя за переданное отрицательное число,
-  // а просто берём его по модулю с помощью Math.abs
-
-  // Дальше используем Math.random() для получения случайного дробного числа в диапазоне [0, 1),
-  // которое домножаем на разницу между переданными числами плюс единица - это будет наша случайная дельта.
-  // После нужно сложить дельту с минимальным значением, чтобы получить итоговое случайное число.
-  const result = Math.random() * (upper - lower + 1) + lower;
-  // "Плюс единица", чтобы включить верхнюю границу диапазона в случайные числа
-
-  // И в конце с помощью метода Math.floor мы округляем полученный результат,
-  // потому что Math.random() генерирует только дробные числа и ноль.
-  return Math.floor(result);
-}
-
 function throttle (callback, delayBetweenFrames) {
   // Используем замыкания, чтобы время "последнего кадра" навсегда приклеилось
   // к возвращаемой функции с условием, тогда мы его сможем перезаписывать
@@ -103,6 +60,4 @@ function throttle (callback, delayBetweenFrames) {
   };
 }
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
-
-export {getRandomInt, checkCommentLength, getUnquiArray, isEscEvent, showAlert, debounce, getRandomPositiveInteger, throttle, getRandomArrayElement};
+export {isEscEvent, showAlert, debounce, throttle};

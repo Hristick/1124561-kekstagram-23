@@ -10,7 +10,7 @@ const ALERT_MESSAGE_TEXT = 'Ошибка загрузки данных!!!';
 const ALERT_TIMEOUT = 7000;
 const appendPhotos = document.querySelector('.pictures');
 const pictureList = document.querySelector('.pictures');
-const uploadForm = document.querySelector('.img-upload__form');
+const uploadFile = document.querySelector('#upload-file');
 
 const onSuccess = (response) => {
   const data = [...response];
@@ -26,4 +26,4 @@ const onError = () => {
 
 getData(onSuccess, onError);
 
-uploadForm.addEventListener('click', onOpenPopup);
+uploadFile.addEventListener('change', onOpenPopup);

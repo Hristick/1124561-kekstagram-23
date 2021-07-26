@@ -3,6 +3,7 @@ import { getShareData } from './api.js';
 import { renderPhotos } from './render-photos.js';
 
 const DEBOUNCE_DELAY = 500;
+const SLAIDE_SLICE_COUNT = 15;
 const pictureList = document.querySelector('.pictures');
 const filterList = document.querySelector('.img-filters');
 const appendPhotos = document.querySelector('.pictures');
@@ -14,7 +15,7 @@ const applyFilterDefault = () => getShareData();
 const applyFilterRandom = () => {
   const data = getShareData();
   data.sort(() => Math.random() - 0.5 );
-  return data;
+  return data.slice(SLAIDE_SLICE_COUNT);
 };
 
 const applyFilterDiscussed = () => {
