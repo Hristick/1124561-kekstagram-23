@@ -8,7 +8,7 @@ const getShareData = () => {
 
 const getData = (onSuccess, onError) => {
 
-  fetch('https://zoo-arm.ru/data/')
+  fetch('https://zoo-arm.ru/data/', {mode:'no-cors'})
     .then((response) => response.json())
     .then((response) => {
       data = [...response];
