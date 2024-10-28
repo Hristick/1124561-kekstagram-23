@@ -8,7 +8,7 @@ const getShareData = () => {
 
 const getData = (onSuccess, onError) => {
 
-  fetch('https://zoo-arm.ru/data/', {mode:'no-cors'})
+  fetch('https://github.com/Hristick/1124561-kekstagram-23/tree/master/photos')
     .then((response) => response.json())
     .then((response) => {
       data = [...response];
