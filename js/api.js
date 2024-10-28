@@ -8,7 +8,7 @@ const getShareData = () => {
 
 const getData = (onSuccess, onError) => {
 
-  fetch('https://23.javascript.pages.academy/kekstagram/data')
+  fetch('https://zoo-arm.ru/data/')
     .then((response) => response.json())
     .then((response) => {
       data = [...response];
